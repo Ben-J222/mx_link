@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, ArrowRight, User, Mail, Phone, Lock, Eye, EyeOff, Check, MapPin, Calendar } from 'lucide-react-native';
 import { Link, router } from 'expo-router';
 import { Picker } from '@react-native-picker/picker';
@@ -8,10 +9,11 @@ import { ThemedView, ThemedText, ThemedButton, ThemedInput } from '@/components/
 import { useAccessibility } from '@/hooks/useAccessibility';
 
 export default function RegisterScreen() {
+  const insets = useSafeAreaInsets();
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [addressSuggestions, setAddressSuggestions] = useState([]);
+  const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
   const [showAddressSuggestions, setShowAddressSuggestions] = useState(false);
   const { theme, setThemeMode } = useTheme();
   const { getAccessibleProps } = useAccessibility();
@@ -301,14 +303,14 @@ export default function RegisterScreen() {
 
             {showAddressSuggestions && addressSuggestions.length > 0 && (
               <View style={styles.suggestionsList}>
-                {addressSuggestions.map((suggestion, index) => (
+                {addressSuggestions.map((suggestion: any, index) => (
                   <TouchableOpacity
                     key={index}
                     style={styles.suggestionItem}
                     onPress={() => selectAddress(suggestion)}
                   >
                     <Text style={styles.suggestionText}>
-                      {suggestion.properties.label}
+                      {suggestion?.properties?.label || ''}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -441,7 +443,7 @@ export default function RegisterScreen() {
         return (
           <>
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Préférences d'affichage</Text>
+              <Text style={{fontSize:14, color:'#C4F112', marginBottom:8}}>Préférences d'affichage</Text>
               <View style={styles.themeSelector}>
                 <TouchableOpacity
                   style={[
@@ -491,7 +493,7 @@ export default function RegisterScreen() {
                 <Text style={styles.checkboxLabel}>
                   Mode accessible
                 </Text>
-                <Text style={styles.accessibilityDescription}>
+                <Text style={{fontSize:12, color:'#888', marginTop:2}}>
                   Améliore l'expérience pour les personnes malvoyantes, dyslexiques ou à mobilité réduite
                 </Text>
               </View>
@@ -552,7 +554,11 @@ export default function RegisterScreen() {
         <View style={styles.overlay} />
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 32 }}
+      >
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton}
