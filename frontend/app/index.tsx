@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Image } from 'react-native';
 import { Zap, Shield, DollarSign, Eye, Users, Award, Menu, X, Camera, FileText, CircleCheck as CheckCircle, Search, MapPin, TriangleAlert as AlertTriangle, MessageCircle } from 'lucide-react-native';
 import { Link } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -10,15 +10,14 @@ export default function LandingPage() {
   const [menuOpen, setMenuOpen] = React.useState(false);
 
   const Header = () => (
-    <View style={styles.header}>
+    <View style={styles. 
+    header}>
       <View style={styles.headerContent}>
         <View style={styles.logo}>
-          <LinearGradient
-            colors={['#C4F112', '#8BC34A']}
-            style={styles.logoIcon}
-          >
-            <Zap size={24} color="#000000" strokeWidth={2} />
-          </LinearGradient>
+          <Image
+            source={require('../assets/images/logo.png')}
+            style={{ width: 75, height: 75, resizeMode: 'contain', marginRight: 4 }}
+          />
           <View>
             <Text style={styles.logoText}>MX Link</Text>
             <Text style={styles.logoSubtext}>Certification Numérique</Text>
@@ -71,11 +70,6 @@ export default function LandingPage() {
       style={styles.hero}
     >
       <View style={styles.heroContent}>
-        <View style={styles.badge}>
-          <Shield size={16} color="#C4F112" strokeWidth={2} />
-          <Text style={styles.badgeText}>Sécurité Militaire</Text>
-        </View>
-
         <Text style={styles.heroTitle}>
           La Première{'\n'}Plateforme de{'\n'}
           <Text style={styles.heroTitleGradient}>Certification{'\n'}Numérique</Text>
@@ -555,28 +549,22 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
     borderBottomWidth: 1,
-    borderBottomColor: '#333333',
+    borderBottomColor: '#33333381',
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingTop: 60,
-    paddingBottom: 16,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   logo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 2,
   },
-  logoIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  
   logoText: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -623,7 +611,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   hero: {
-    paddingTop: 140,
+    paddingTop: 120,
     paddingBottom: 80,
     paddingHorizontal: 24,
   },

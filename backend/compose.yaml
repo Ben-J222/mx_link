@@ -1,0 +1,46 @@
+# backend/compose.yml
+services:
+###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    container_name: mxlink_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mxlink}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mxlink_dev_password}
+      POSTGRES_USER: ${POSTGRES_USER:-mxlink}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-mxlink}", "-U", "${POSTGRES_USER:-mxlink}"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    ports:
+      - "5432:5432"
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+      # Utilise le dossier docker à la racine
+      - ../docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+###< doctrine/doctrine-bundle ###
+
+  # Ajout Redis pour les sessions (futur B8-LOCK)
+  redis:
+    image: redis:7-alpine
+    container_name: mxlink_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # Adminer pour gérer la DB facilement
+  adminer:
+    image: adminer:latest
+    container_name: mxlink_adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  database_data:
+###< doctrine/doctrine-bundle ###
+  redis_data:
